@@ -7,33 +7,41 @@
 html, body, #root {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   background: #000;
 }
 
 .universe-root {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   font-family: 'Georgia', serif;
   color: #f0e6c8;
 }
 
+/* Fixed 3D canvas covers the full page as background */
 .universe-canvas {
-  position: absolute !important;
+  position: fixed !important;
   inset: 0;
   width: 100% !important;
   height: 100% !important;
+  z-index: 0;
 }
 
-.universe-overlay {
-  position: absolute;
-  inset: 0;
+/* Scrollable layer on top */
+.universe-scroll {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HERO ── */
+.universe-hero {
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 40px 48px;
-  pointer-events: none;
 }
 
 .universe-header {
@@ -55,7 +63,6 @@ html, body, #root {
   align-items: flex-start;
   gap: 16px;
   max-width: 520px;
-  pointer-events: auto;
 }
 
 .universe-eyebrow {
@@ -99,10 +106,200 @@ html, body, #root {
   color: #000;
 }
 
+.universe-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.5);
+  animation: universe-bob 2s ease-in-out infinite;
+}
+
+.universe-scroll-arrow {
+  font-size: 16px;
+}
+
+@keyframes universe-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(6px); opacity: 0.9; }
+}
+
+/* ── SPACE ROYALTY ASSETS ── */
+.universe-assets {
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.92) 100%);
+  padding: 80px 24px 80px;
+}
+
+.universe-assets-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.universe-assets-title {
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: normal;
+  line-height: 1.2;
+  text-align: center;
+  color: #f0e6c8;
+  margin-bottom: 16px;
+}
+
+.universe-assets-title-gold {
+  color: #c9a84c;
+  text-shadow: 0 0 40px rgba(201, 168, 76, 0.3);
+}
+
+.universe-assets-sub {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(240, 230, 200, 0.6);
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 48px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.universe-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 640px) {
+  .universe-cards {
+    grid-template-columns: 1fr;
+  }
+  .universe-hero {
+    padding: 28px 24px;
+  }
+}
+
+.universe-card {
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 16px;
+  padding: 28px;
+  text-decoration: none;
+  color: #f0e6c8;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.universe-card:hover {
+  border-color: rgba(201, 168, 76, 0.5);
+  transform: translateY(-2px);
+}
+
+.universe-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.universe-card-emoji {
+  font-size: 28px;
+}
+
+.universe-card-tag {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+
+.universe-card-title {
+  font-size: 22px;
+  font-weight: normal;
+  color: #f0e6c8;
+  letter-spacing: 0.03em;
+}
+
+.universe-card-subtitle {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  opacity: 0.8;
+}
+
+.universe-card-desc {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(240, 230, 200, 0.65);
+  flex: 1;
+}
+
+.universe-card-meta {
+  display: flex;
+  gap: 24px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(201, 168, 76, 0.15);
+}
+
+.universe-card-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.universe-card-meta-label {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240, 230, 200, 0.4);
+}
+
+.universe-card-meta-value {
+  font-size: 15px;
+  color: #c9a84c;
+}
+
+.universe-card-cta {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.7);
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+
+.universe-card:hover .universe-card-cta {
+  color: #c9a84c;
+}
+
+.universe-assets-legal {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240, 230, 200, 0.25);
+  text-align: center;
+}
+
+/* ── FOOTER ── */
 .universe-footer {
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+  padding: 24px 48px;
+  border-top: 1px solid rgba(201, 168, 76, 0.1);
 }
 
 .universe-footer p {
