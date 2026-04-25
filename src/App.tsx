@@ -906,11 +906,6 @@ export default function App() {
 
   const handleClose = useCallback(() => setSelectedWorld(null), [])
 
-  const handleFocusFromGrid = useCallback((w: World) => {
-    setSelectedWorld(w)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
-
   return (
     <div className="universe-root">
 
