@@ -36,11 +36,11 @@ function GalaxyDisc() {
 
       const t = r / 72
       const b = 0.35 + Math.random() * 0.55
-      if (Math.random() < 0.35) { // warm core
+      if (Math.random() < 0.35) {
         colors[i * 3]     = b * (1.0 - t * 0.1)
         colors[i * 3 + 1] = b * (0.75 - t * 0.25)
         colors[i * 3 + 2] = b * (0.3 + t * 0.4)
-      } else { // cool blue arm
+      } else {
         colors[i * 3]     = b * 0.4
         colors[i * 3 + 1] = b * (0.55 + t * 0.2)
         colors[i * 3 + 2] = b * (0.85 + Math.random() * 0.15)
@@ -92,10 +92,10 @@ function DeepStars() {
 
       const type = Math.random()
       const b = 0.5 + Math.random() * 0.5
-      if      (type < 0.08) { colors[i*3]=b;         colors[i*3+1]=b*0.35; colors[i*3+2]=b*0.2  } // red
-      else if (type < 0.18) { colors[i*3]=b*0.95;    colors[i*3+1]=b*0.6;  colors[i*3+2]=b*0.15 } // orange
-      else if (type < 0.32) { colors[i*3]=b;         colors[i*3+1]=b*0.9;  colors[i*3+2]=b*0.45 } // yellow
-      else                  { colors[i*3]=b*0.6;     colors[i*3+1]=b*0.75; colors[i*3+2]=b      } // blue-white
+      if      (type < 0.08) { colors[i*3]=b;      colors[i*3+1]=b*0.35; colors[i*3+2]=b*0.2  }
+      else if (type < 0.18) { colors[i*3]=b*0.95; colors[i*3+1]=b*0.6;  colors[i*3+2]=b*0.15 }
+      else if (type < 0.32) { colors[i*3]=b;      colors[i*3+1]=b*0.9;  colors[i*3+2]=b*0.45 }
+      else                  { colors[i*3]=b*0.6;  colors[i*3+1]=b*0.75; colors[i*3+2]=b      }
     }
 
     const g = new THREE.BufferGeometry()
@@ -472,16 +472,55 @@ function WorldPanel({ world, onClose }: { world: World; onClose: () => void }) {
   )
 }
 
+// ─── 2D: Manifesto ────────────────────────────────────────────────────────────
+function ManifestoSection() {
+  return (
+    <section className="section manifesto-section">
+      <div className="section-inner manifesto-inner">
+        <p className="manifesto-label">Our Mission</p>
+        <h2 className="manifesto-title">
+          We are fractalizing<br />the universe.
+        </h2>
+        <div className="manifesto-divider" />
+        <p className="manifesto-body">
+          A handful of people own the films that move billions. The buildings everyone walks past.
+          The artists whose work fills the air. The breakthroughs that will define the next century.
+        </p>
+        <p className="manifesto-body">
+          We are ending that — asset class by asset class, dimension by dimension, fraction by
+          fraction — until the universe belongs to everyone.
+        </p>
+        <div className="manifesto-stats">
+          <div className="mstat">
+            <span className="mstat-n">5</span>
+            <span className="mstat-l">Worlds</span>
+          </div>
+          <div className="mstat-sep" />
+          <div className="mstat">
+            <span className="mstat-n">∞</span>
+            <span className="mstat-l">Asset Classes</span>
+          </div>
+          <div className="mstat-sep" />
+          <div className="mstat">
+            <span className="mstat-n">0</span>
+            <span className="mstat-l">Gatekeepers</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── 2D: Worlds grid ──────────────────────────────────────────────────────────
 function WorldsSection({ onFocus }: { onFocus: (w: World) => void }) {
   return (
     <section className="section" id="worlds">
       <div className="section-inner">
         <p className="eyebrow">The Universe</p>
-        <h2 className="section-h">Five Worlds. One Platform.</h2>
+        <h2 className="section-h">Five Worlds. Five Dimensions.</h2>
         <p className="section-sub">
-          Each world is a fully immersive 3D experience built around a specific asset class.
-          Explore, learn, and invest — in the universe, everything is connected.
+          Each world is a portal — a fully immersive 3D dimension built around a specific asset class.
+          Step through. Explore. Own a fraction of a reality you've never had access to.
         </p>
         <div className="worlds-grid">
           {WORLDS.map(w => (
@@ -518,9 +557,9 @@ function WorldsSection({ onFocus }: { onFocus: (w: World) => void }) {
 // ─── 2D: How it works ─────────────────────────────────────────────────────────
 function HowSection() {
   const steps = [
-    { n: '01', title: 'Enter a World', body: "Every offering lives inside a purpose-built 3D universe. Walk through it. Understand what you're investing in before you commit a single dollar." },
-    { n: '02', title: 'Choose Your Stake', body: 'Select your investment amount. Reg CF offerings are open to all investors — no accreditation required. Reg D offerings require accreditation verification.' },
-    { n: '03', title: 'Own a Fraction', body: 'Receive your units, track distributions, and watch your portfolio grow inside your personal universe. Every asset, every return — all in one place.' },
+    { n: '01', title: 'Enter a Dimension', body: "Every offering lives inside a purpose-built 3D universe. Walk through it. Understand what you're investing in before you commit a single dollar." },
+    { n: '02', title: 'Choose Your Fraction', body: 'Select your investment amount. Reg CF worlds are open to all investors — no accreditation required. Reg D worlds require verification.' },
+    { n: '03', title: 'Own the Universe', body: 'Receive your units, track distributions, and watch your portfolio grow. Every asset, every return — one universe, yours forever.' },
   ]
   return (
     <section className="section section-dark">
@@ -541,22 +580,22 @@ function HowSection() {
   )
 }
 
-// ─── 2D: Two paths ────────────────────────────────────────────────────────────
-function TwoPathsSection() {
+// ─── 2D: Two doors ────────────────────────────────────────────────────────────
+function TwoDoorsSection() {
   return (
     <section className="section">
       <div className="section-inner">
         <p className="eyebrow">Open to Everyone</p>
-        <h2 className="section-h">Two Paths. One Universe.</h2>
+        <h2 className="section-h">One Universe. Two Doors.</h2>
         <p className="section-sub">
           Fraction Universe is the first platform where accredited and non-accredited investors
-          explore the same worlds — just through different doors.
+          explore the same dimensions — through different entry points.
         </p>
         <div className="paths-grid">
           <div className="path-card path-cf">
-            <p className="path-label">Reg CF</p>
+            <p className="path-label">Reg CF · Open Dimension</p>
             <h3 className="path-title">Open to All</h3>
-            <p className="path-desc">No accreditation required. Anyone can invest — the general public, first-time investors, community supporters. Investment limits apply based on income and net worth.</p>
+            <p className="path-desc">No accreditation required. Anyone can invest — the general public, first-time investors, community builders. Investment limits apply based on income and net worth.</p>
             <ul className="path-list">
               <li>No accreditation required</li>
               <li>Up to $5M per offering per year</li>
@@ -564,13 +603,13 @@ function TwoPathsSection() {
             </ul>
           </div>
           <div className="path-card path-d">
-            <p className="path-label">Reg D 506(c)</p>
+            <p className="path-label">Reg D 506(c) · The Kingdom</p>
             <h3 className="path-title">Accredited Investors</h3>
-            <p className="path-desc">Verified accredited investors access higher-minimum, premium offerings inside FractionKings — the castle world. More exclusive, larger raises, deeper deal access.</p>
+            <p className="path-desc">Verified accredited investors access higher-minimum, premium offerings inside FractionKings — the original world. More exclusive, larger raises, deeper deal access.</p>
             <ul className="path-list">
               <li>Accreditation verification required</li>
               <li>No raise limit</li>
-              <li>The Kingdom — fractionkings.com</li>
+              <li>fractionkings.com — live now</li>
             </ul>
           </div>
         </div>
@@ -582,20 +621,20 @@ function TwoPathsSection() {
 // ─── 2D: Build Your World ─────────────────────────────────────────────────────
 function BuildSection() {
   const cards = [
-    { icon: '◈', title: 'Custom 3D Universe', body: 'A purpose-built virtual world themed to your brand — not a template. Your story, your architecture, your experience.' },
+    { icon: '◈', title: 'Custom 3D Dimension', body: 'A purpose-built virtual world themed to your brand, film, property, or IP — not a template. Your story. Your architecture. Your dimension.' },
     { icon: '◎', title: 'AR & VR Ready', body: 'Every world we build is AR and VR compatible. Investors walk through your project on a headset before committing capital.' },
     { icon: '◉', title: 'Compliance Built In', body: 'Securities compliance is baked into every offering structure. Reg CF, Reg D, and hybrid offerings — handled end to end.' },
-    { icon: '⬡', title: 'Investor Dashboard', body: 'Your investors get a personal universe — all holdings, distributions, and updates in one immersive portfolio.' },
+    { icon: '⬡', title: 'Investor Universe', body: 'Your investors get a personal universe — all holdings, distributions, and updates in one immersive interdimensional portfolio.' },
   ]
   return (
     <section className="section section-dark">
       <div className="section-inner">
         <p className="eyebrow">For Creators & Companies</p>
-        <h2 className="section-h">We Build Your Universe</h2>
+        <h2 className="section-h">We Build Your Dimension</h2>
         <p className="section-sub">
           Every company, film, artist, and property deserves its own world.
-          We replace the generic crowdfunding page with an immersive 3D experience
-          that gives your investors something worth entering.
+          We replace the generic crowdfunding page with an immersive 3D dimension
+          that gives your investors somewhere worth entering.
         </p>
         <div className="build-grid">
           {cards.map(c => (
@@ -608,7 +647,7 @@ function BuildSection() {
         </div>
         <div style={{ textAlign: 'center', marginTop: '52px' }}>
           <a href="https://fractionkings.com/contact" className="build-cta" target="_blank" rel="noopener noreferrer">
-            Apply to Launch Your World →
+            Apply to Open Your Dimension →
           </a>
         </div>
       </div>
@@ -622,24 +661,25 @@ function CTASection() {
     <section className="section cta-section">
       <div className="section-inner" style={{ textAlign: 'center' }}>
         <div className="cta-orb" />
-        <p className="eyebrow">The Universe Is Expanding</p>
-        <h2 className="cta-h">New worlds are opening.</h2>
+        <p className="eyebrow">The Universe Has No Ceiling</p>
+        <h2 className="cta-h">New dimensions<br />are opening.</h2>
         <p className="cta-sub">
-          Get early access to The Studio, The Estate, The Stage, and The Lab
-          the moment their doors open.
+          The Studio. The Estate. The Stage. The Lab.
+          Get early access the moment each dimension opens — and own a fraction of everything.
         </p>
         <div className="cta-btns">
           <a href="https://fractionkings.com" className="cta-primary" target="_blank" rel="noopener noreferrer">
-            Enter The Kingdom Now →
+            Enter The Kingdom →
           </a>
           <a href="https://fractionkings.com/contact" className="cta-secondary" target="_blank" rel="noopener noreferrer">
-            Get Early Access
+            Open Early Access
           </a>
         </div>
         <p className="cta-legal">
-          Fraction Universe is an investment platform operating under applicable federal securities laws.
-          Reg CF offerings are available to all US investors. Reg D 506(c) offerings are limited to
-          verified accredited investors. Investing involves risk, including loss of principal.
+          Fraction Universe Inc. operates under applicable federal securities laws.
+          Reg CF offerings are available to all US investors subject to individual investment limits.
+          Reg D 506(c) offerings are limited to verified accredited investors.
+          Investing involves risk, including loss of principal.
         </p>
       </div>
     </section>
@@ -653,7 +693,7 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-brand">
           <span className="footer-wm">FRACTION UNIVERSE</span>
-          <p className="footer-tag">Every world. Every investor. One universe.</p>
+          <p className="footer-tag">Fractalizing everything. Every dimension. Every investor.</p>
         </div>
         <div className="footer-links">
           <a href="https://fractionkings.com" target="_blank" rel="noopener noreferrer">The Kingdom</a>
@@ -661,7 +701,7 @@ function Footer() {
           <a href="https://fractionkings.com/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>
           <a href="https://fractionkings.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
         </div>
-        <p className="footer-copy">© 2026 Fraction Universe Inc. · All rights reserved · fractionuniverse.com</p>
+        <p className="footer-copy">© 2026 Fraction Universe Inc. · fractionuniverse.com</p>
       </div>
     </footer>
   )
@@ -735,11 +775,11 @@ export default function App() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.55, delay: 0.15 }}
             >
-              <p className="hero-eyebrow">AR + VR Crowdfunding Platform</p>
-              <h1 className="hero-title">The Universe<br />is Open.</h1>
+              <p className="hero-eyebrow">Fractalizing Reality</p>
+              <h1 className="hero-title">The Universe<br />is Yours.</h1>
               <p className="hero-sub">
-                Five immersive 3D worlds. Every asset class.<br />
-                All investors welcome.
+                Five immersive dimensions. Every asset class.<br />
+                Every investor — welcome.
               </p>
               <div className="hero-ctas">
                 <a href="https://fractionkings.com" className="hero-btn-primary" target="_blank" rel="noopener noreferrer">
@@ -794,9 +834,10 @@ export default function App() {
 
       {/* Scrollable 2D content */}
       <div className="scroll-content">
+        <ManifestoSection />
         <WorldsSection onFocus={handleFocusFromGrid} />
         <HowSection />
-        <TwoPathsSection />
+        <TwoDoorsSection />
         <BuildSection />
         <CTASection />
         <Footer />

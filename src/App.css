@@ -89,7 +89,7 @@ html, body, #root {
   position: absolute;
   bottom: 14vh;
   left: 48px;
-  max-width: 520px;
+  max-width: 560px;
 }
 .hero-eyebrow {
   font-size: 10px;
@@ -102,8 +102,10 @@ html, body, #root {
   font-size: clamp(52px, 7.5vw, 96px);
   font-weight: normal;
   line-height: 0.92;
-  color: #eeeaff;
-  text-shadow: 0 0 80px rgba(120,100,255,0.35), 0 0 200px rgba(80,60,200,0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #d4ddff 30%, #9ba8ff 60%, #6655cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 20px;
   letter-spacing: -0.01em;
 }
@@ -374,6 +376,89 @@ html, body, #root {
   box-shadow: 0 0 6px #4ade80;
 }
 
+/* ─── Manifesto section ──────────────────────────────────────────────────────── */
+.manifesto-section {
+  background: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(40,20,100,0.18) 0%, rgba(1,2,8,0.98) 65%);
+  border-top: 1px solid rgba(120,100,255,0.12) !important;
+}
+.manifesto-inner { text-align: center; }
+.manifesto-label {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(160,140,255,0.45);
+  margin-bottom: 20px;
+}
+.manifesto-title {
+  font-size: clamp(36px, 5.5vw, 72px);
+  font-weight: normal;
+  line-height: 1.08;
+  background: linear-gradient(135deg, #ffffff 0%, #c8d4ff 40%, #8878ff 80%, #5040bb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 32px;
+  letter-spacing: -0.01em;
+}
+.manifesto-divider {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(120,100,255,0.5), transparent);
+  margin: 0 auto 32px;
+}
+.manifesto-body {
+  font-size: 16px;
+  line-height: 1.9;
+  color: rgba(200,210,255,0.55);
+  max-width: 680px;
+  margin: 0 auto 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.manifesto-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 56px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.mstat {
+  flex: 1;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8,6,22,0.6);
+}
+.mstat-sep {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255,255,255,0.06);
+}
+.mstat-n {
+  font-size: 42px;
+  font-weight: normal;
+  line-height: 1;
+  background: linear-gradient(135deg, #eeeaff 0%, #9ba8ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Georgia', serif;
+}
+.mstat-l {
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(180,190,255,0.35);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 /* ─── Scrollable 2D content ──────────────────────────────────────────────────── */
 .scroll-content {
   position: relative;
@@ -444,6 +529,11 @@ html, body, #root {
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in srgb, var(--wc) 28%, transparent), transparent 70%);
   pointer-events: none;
+  animation: orb-pulse 5s ease-in-out infinite;
+}
+@keyframes orb-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.18); }
 }
 .wcard-body { padding: 24px; }
 .wcard-top {
