@@ -468,7 +468,8 @@ export default function App() {
     return () => window.removeEventListener('scroll', h)
   }, [])
 
-  const handleSelect = useCallback((w: World) => {
+  const handleSelect = useCallback((w: World | null) => {
+    if (!w) return
     setSelectedWorld(p => p?.id === w.id ? null : w)
   }, [])
 
