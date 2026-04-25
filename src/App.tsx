@@ -249,6 +249,73 @@ function ShootingStars() {
   )
 }
 
+// ─── Kingdom castle (on planet surface) ──────────────────────────────────────
+function KingdomCastle() {
+  const stoneMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#8a7a68',
+    emissive: '#3a2a1a',
+    emissiveIntensity: 0.5,
+    roughness: 0.8,
+    metalness: 0.15,
+  }), [])
+  const goldMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: '#c9a84c',
+    emissive: '#8a6010',
+    emissiveIntensity: 1.5,
+    roughness: 0.2,
+    metalness: 0.8,
+  }), [])
+  useEffect(() => () => { stoneMat.dispose(); goldMat.dispose() }, [stoneMat, goldMat])
+
+  const towers: [number, number, number][] = [
+    [-0.38, 0, -0.38], [0.38, 0, -0.38],
+    [-0.38, 0,  0.38], [0.38, 0,  0.38],
+  ]
+
+  return (
+    <group>
+      {/* Foundation */}
+      <mesh material={stoneMat} position={[0, -0.04, 0]}>
+        <boxGeometry args={[0.92, 0.08, 0.92]} />
+      </mesh>
+      {/* Main keep */}
+      <mesh material={stoneMat} position={[0, 0.55, 0]}>
+        <boxGeometry args={[0.42, 1.0, 0.42]} />
+      </mesh>
+      {/* Keep merlons front/back */}
+      {[-0.14, 0, 0.14].map(x => (
+        <mesh key={`mf${x}`} material={stoneMat} position={[x, 1.12,  0.22]}><boxGeometry args={[0.1, 0.12, 0.04]} /></mesh>
+      ))}
+      {[-0.14, 0, 0.14].map(x => (
+        <mesh key={`mb${x}`} material={stoneMat} position={[x, 1.12, -0.22]}><boxGeometry args={[0.1, 0.12, 0.04]} /></mesh>
+      ))}
+      {/* Corner towers + gold cones */}
+      {towers.map(([x,, z]) => (
+        <group key={`t${x}${z}`}>
+          <mesh material={stoneMat} position={[x, 0.52, z]}>
+            <cylinderGeometry args={[0.13, 0.15, 1.04, 8]} />
+          </mesh>
+          <mesh material={goldMat} position={[x, 1.14, z]}>
+            <coneGeometry args={[0.14, 0.44, 8]} />
+          </mesh>
+        </group>
+      ))}
+      {/* Curtain walls */}
+      <mesh material={stoneMat} position={[0,  0.22, -0.38]}><boxGeometry args={[0.76, 0.44, 0.06]} /></mesh>
+      <mesh material={stoneMat} position={[0,  0.22,  0.38]}><boxGeometry args={[0.76, 0.44, 0.06]} /></mesh>
+      <mesh material={stoneMat} position={[-0.38, 0.22, 0]}><boxGeometry args={[0.06, 0.44, 0.76]} /></mesh>
+      <mesh material={stoneMat} position={[ 0.38, 0.22, 0]}><boxGeometry args={[0.06, 0.44, 0.76]} /></mesh>
+      {/* Flagpole + banner */}
+      <mesh material={goldMat} position={[0, 1.48, 0]}>
+        <cylinderGeometry args={[0.018, 0.018, 0.72, 4]} />
+      </mesh>
+      <mesh material={goldMat} position={[0.11, 1.76, 0]}>
+        <boxGeometry args={[0.22, 0.13, 0.02]} />
+      </mesh>
+    </group>
+  )
+}
+
 // ─── Atmosphere glow ──────────────────────────────────────────────────────────
 function AtmosphereGlow({ color, radius }: { color: string; radius: number }) {
   const mat = useMemo(() => new THREE.MeshBasicMaterial({
@@ -335,6 +402,11 @@ function WorldPlanet({
         onPointerOut={() => setHovered(false)}
       >
         <sphereGeometry args={[world.scale, 64, 48]} />
+        {world.hasCastle && (
+          <group position={[0, world.scale + 0.05, 0]} scale={world.scale * 0.13}>
+            <KingdomCastle />
+          </group>
+        )}
       </mesh>
 
       {world.hasRing && ringMat && (
@@ -472,38 +544,40 @@ function WorldPanel({ world, onClose }: { world: World; onClose: () => void }) {
   )
 }
 
-// ─── 2D: Manifesto ────────────────────────────────────────────────────────────
-function ManifestoSection() {
+// ─── 2D: Opening statement ────────────────────────────────────────────────────
+function OpeningSection() {
   return (
     <section className="section manifesto-section">
       <div className="section-inner manifesto-inner">
-        <p className="manifesto-label">Our Mission</p>
+        <p className="manifesto-label">You've Always Watched From the Outside</p>
         <h2 className="manifesto-title">
-          We are fractalizing<br />the universe.
+          The world's most extraordinary<br />assets were never meant for you.
         </h2>
         <div className="manifesto-divider" />
         <p className="manifesto-body">
-          A handful of people own the films that move billions. The buildings everyone walks past.
-          The artists whose work fills the air. The breakthroughs that will define the next century.
+          Blockbuster films. Museum-quality paintings. Boutique hotels. The rising artist about to
+          sell out stadiums. The celebrity brand worth hundreds of millions. These were investments
+          for the ultra-wealthy — the insiders who already had everything.
         </p>
         <p className="manifesto-body">
-          We are ending that — asset class by asset class, dimension by dimension, fraction by
-          fraction — until the universe belongs to everyone.
+          We built the technology to change that. Every offering on Fraction Universe is an
+          immersive 3D world you step inside — not a checkout page. You don't just buy a fraction
+          of something extraordinary. You enter it. You own it. You feel it.
         </p>
         <div className="manifesto-stats">
           <div className="mstat">
-            <span className="mstat-n">5</span>
-            <span className="mstat-l">Worlds</span>
+            <span className="mstat-n">$0</span>
+            <span className="mstat-l">Minimum to Explore</span>
           </div>
           <div className="mstat-sep" />
           <div className="mstat">
-            <span className="mstat-n">∞</span>
-            <span className="mstat-l">Asset Classes</span>
+            <span className="mstat-n">3D</span>
+            <span className="mstat-l">Every Experience</span>
           </div>
           <div className="mstat-sep" />
           <div className="mstat">
-            <span className="mstat-n">0</span>
-            <span className="mstat-l">Gatekeepers</span>
+            <span className="mstat-n">All</span>
+            <span className="mstat-l">Investors Welcome</span>
           </div>
         </div>
       </div>
@@ -511,41 +585,78 @@ function ManifestoSection() {
   )
 }
 
-// ─── 2D: Worlds grid ──────────────────────────────────────────────────────────
-function WorldsSection({ onFocus }: { onFocus: (w: World) => void }) {
+// ─── 2D: What you can own ─────────────────────────────────────────────────────
+const ASSET_TYPES = [
+  {
+    icon: '◎',
+    category: 'Film & Entertainment',
+    headline: 'Own a piece of the next blockbuster.',
+    body: 'Invest in feature films before they hit screens. Walk through the world, see the team, understand the deal — then own a fraction of the box office.',
+    example: 'INDIGO — A film by Lucas Foster ($4B+ WW box office)',
+    color: '#5548d4',
+  },
+  {
+    icon: '◈',
+    category: 'Fine Art & Collectibles',
+    headline: 'Own what hangs in the museum.',
+    body: 'Fractional ownership of museum-quality works, iconic collectibles, and cultural artifacts. Pieces most people can only photograph through glass.',
+    example: 'William Shatner × Star Trek — iconic screen collectibles',
+    color: '#c9a84c',
+  },
+  {
+    icon: '⬡',
+    category: 'Real Estate',
+    headline: 'Own the hotel. The building. The view.',
+    body: 'Fractional real estate across residential, commercial, and hospitality. Walk through the property in 3D before you invest a single dollar.',
+    example: 'Boutique hotels, luxury residential, mixed-use developments',
+    color: '#2d8a4e',
+  },
+  {
+    icon: '◉',
+    category: 'Artists & Musicians',
+    headline: 'Back the next icon before the world knows their name.',
+    body: 'Invest in recording artists, touring musicians, and cultural figures at the moment their trajectory is obvious — before it becomes expensive.',
+    example: 'Rising artists, labels, touring IP, and streaming originals',
+    color: '#8b2fc9',
+  },
+  {
+    icon: '△',
+    category: 'Celebrities & Brands',
+    headline: 'Own a fraction of the brand everyone knows.',
+    body: 'Celebrity ventures, personal brands, and cultural IP built on massive existing audiences. The kind of deal that used to require a private introduction.',
+    example: 'Celebrity brands, licensing deals, and signature IP',
+    color: '#c9a84c',
+  },
+  {
+    icon: '✦',
+    category: 'Space & Deep Tech',
+    headline: 'Own the next frontier.',
+    body: 'Aerospace, AI, clean energy, and biotech. The companies building the infrastructure of the next century — fractional, accessible, immersive.',
+    example: 'Space Royalty — NASA × SpaceX orbital technology',
+    color: '#0e7490',
+  },
+]
+
+function WhatYouCanOwnSection() {
   return (
-    <section className="section" id="worlds">
+    <section className="section section-dark" id="worlds">
       <div className="section-inner">
-        <p className="eyebrow">The Universe</p>
-        <h2 className="section-h">Five Worlds. Five Dimensions.</h2>
+        <p className="eyebrow">What You Can Own</p>
+        <h2 className="section-h">Assets that were never available to you. Until now.</h2>
         <p className="section-sub">
-          Each world is a portal — a fully immersive 3D dimension built around a specific asset class.
-          Step through. Explore. Own a fraction of a reality you've never had access to.
+          Every offering lives inside a fully immersive 3D world. You don't click through a PDF.
+          You walk through the experience — the film set, the gallery, the property — then decide
+          whether to own a fraction of it.
         </p>
-        <div className="worlds-grid">
-          {WORLDS.map(w => (
-            <div
-              key={w.id}
-              className={`wcard${w.status === 'COMING' ? ' coming' : ''}`}
-              style={{ '--wc': w.color } as CSSProperties}
-              onClick={() => onFocus(w)}
-            >
-              <div className="wcard-orb" />
-              <div className="wcard-body">
-                <div className="wcard-top">
-                  <span className="wcard-reg">{w.regulation}</span>
-                  <span className={`wcard-status ${w.status === 'LIVE' ? 'live' : 'coming'}`}>
-                    {w.status === 'LIVE' ? 'Live' : 'Coming'}
-                  </span>
-                </div>
-                <h3 className="wcard-name">{w.name}</h3>
-                <p className="wcard-sub">{w.subtitle}</p>
-                <p className="wcard-tagline">{w.tagline}</p>
-                <div className="wcard-footer">
-                  <span className="wcard-reglabel">{w.regLabel}</span>
-                  <span className="wcard-arrow">↗</span>
-                </div>
-              </div>
+        <div className="asset-grid">
+          {ASSET_TYPES.map(a => (
+            <div key={a.category} className="asset-card" style={{ '--wc': a.color } as CSSProperties}>
+              <div className="asset-orb" />
+              <span className="asset-icon">{a.icon}</span>
+              <p className="asset-category">{a.category}</p>
+              <h3 className="asset-headline">{a.headline}</h3>
+              <p className="asset-body">{a.body}</p>
+              <p className="asset-example">{a.example}</p>
             </div>
           ))}
         </div>
@@ -554,18 +665,80 @@ function WorldsSection({ onFocus }: { onFocus: (w: World) => void }) {
   )
 }
 
-// ─── 2D: How it works ─────────────────────────────────────────────────────────
-function HowSection() {
+// ─── 2D: Proof — FractionKings ───────────────────────────────────────────────
+function ProofSection() {
+  return (
+    <section className="section proof-section">
+      <div className="section-inner proof-inner">
+        <div className="proof-left">
+          <p className="eyebrow">We Proved It First</p>
+          <h2 className="section-h" style={{ marginBottom: '20px' }}>
+            FractionKings.com —<br />the first world we built.
+          </h2>
+          <p className="proof-body">
+            Before there was a universe, there was a castle. FractionKings.com was the first
+            immersive 3D investment platform ever built — a medieval world that accredited
+            investors could walk through to explore real offerings in film, fine art, and
+            space technology.
+          </p>
+          <p className="proof-body">
+            It worked. Now FractionKings lives inside Fraction Universe as The Kingdom —
+            one world among five, the original. Reg D 506(c), accredited investors, no
+            raise limit. The proof of concept for everything we're now opening to everyone.
+          </p>
+          <div className="proof-stats">
+            <div className="pstat">
+              <span className="pstat-n">$4B+</span>
+              <span className="pstat-l">Producer box office</span>
+            </div>
+            <div className="pstat">
+              <span className="pstat-n">3</span>
+              <span className="pstat-l">Live offerings</span>
+            </div>
+            <div className="pstat">
+              <span className="pstat-n">1st</span>
+              <span className="pstat-l">Immersive 3D investment platform</span>
+            </div>
+          </div>
+          <a href="https://fractionkings.com" className="proof-link" target="_blank" rel="noopener noreferrer">
+            Visit FractionKings.com →
+          </a>
+        </div>
+        <div className="proof-right">
+          <div className="proof-castle-card">
+            <div className="proof-castle-glow" />
+            <p className="proof-castle-label">The Kingdom</p>
+            <p className="proof-castle-sub">FractionKings.com</p>
+            <div className="proof-castle-badges">
+              <span className="proof-badge live">Live Now</span>
+              <span className="proof-badge reg">Reg D 506(c)</span>
+              <span className="proof-badge accredited">Accredited Only</span>
+            </div>
+            <p className="proof-castle-desc">
+              Film · Fine Art · Space Technology
+            </p>
+            <p className="proof-castle-offerings">
+              INDIGO · Space Royalty · William Shatner collectibles
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── 2D: The experience ───────────────────────────────────────────────────────
+function ExperienceSection() {
   const steps = [
-    { n: '01', title: 'Enter a Dimension', body: "Every offering lives inside a purpose-built 3D universe. Walk through it. Understand what you're investing in before you commit a single dollar." },
-    { n: '02', title: 'Choose Your Fraction', body: 'Select your investment amount. Reg CF worlds are open to all investors — no accreditation required. Reg D worlds require verification.' },
-    { n: '03', title: 'Own the Universe', body: 'Receive your units, track distributions, and watch your portfolio grow. Every asset, every return — one universe, yours forever.' },
+    { n: '01', title: 'Enter the World', body: "You don't read a prospectus. You walk through a 3D environment built specifically for the offering — the film's world, the artist's stage, the property you're about to own a fraction of." },
+    { n: '02', title: 'Understand What You Own', body: 'Every world shows you the team, the deal, the upside. You see the offering like an insider — not a footnote in a filing. Then you decide.' },
+    { n: '03', title: 'Own Your Fraction', body: 'Invest at your level. Receive your units. Track your returns. Every asset you own lives in your personal universe — not a spreadsheet.' },
   ]
   return (
     <section className="section section-dark">
       <div className="section-inner">
-        <p className="eyebrow">The Process</p>
-        <h2 className="section-h">How It Works</h2>
+        <p className="eyebrow">The Experience</p>
+        <h2 className="section-h">You don't fill out a form. You enter a world.</h2>
         <div className="how-grid">
           {steps.map(s => (
             <div key={s.n} className="how-step">
@@ -588,28 +761,36 @@ function TwoDoorsSection() {
         <p className="eyebrow">Open to Everyone</p>
         <h2 className="section-h">One Universe. Two Doors.</h2>
         <p className="section-sub">
-          Fraction Universe is the first platform where accredited and non-accredited investors
-          explore the same dimensions — through different entry points.
+          Fraction Universe runs both Reg CF offerings open to the general public, and Reg D
+          offerings for accredited investors — often on the same deal, at the same time.
         </p>
         <div className="paths-grid">
           <div className="path-card path-cf">
-            <p className="path-label">Reg CF · Open Dimension</p>
+            <p className="path-label">Reg CF · Fraction Universe</p>
             <h3 className="path-title">Open to All</h3>
-            <p className="path-desc">No accreditation required. Anyone can invest — the general public, first-time investors, community builders. Investment limits apply based on income and net worth.</p>
+            <p className="path-desc">
+              No accreditation required. Any US investor can own a fraction of a film, a piece of
+              art, a property, or a rising artist. FINRA-regulated. Investment limits apply.
+            </p>
             <ul className="path-list">
               <li>No accreditation required</li>
               <li>Up to $5M per offering per year</li>
-              <li>The Studio, The Estate, The Stage, The Lab</li>
+              <li>Film, art, real estate, artists, celebrities, deep tech</li>
+              <li>fractionuniverse.com — coming 2026</li>
             </ul>
           </div>
           <div className="path-card path-d">
             <p className="path-label">Reg D 506(c) · The Kingdom</p>
             <h3 className="path-title">Accredited Investors</h3>
-            <p className="path-desc">Verified accredited investors access higher-minimum, premium offerings inside FractionKings — the original world. More exclusive, larger raises, deeper deal access.</p>
+            <p className="path-desc">
+              Verified accredited investors access higher-minimum offerings inside FractionKings —
+              the original world. Larger raises, deeper access, premium deal terms. Live now.
+            </p>
             <ul className="path-list">
               <li>Accreditation verification required</li>
               <li>No raise limit</li>
               <li>fractionkings.com — live now</li>
+              <li>Simultaneous raises with Fraction Universe offerings</li>
             </ul>
           </div>
         </div>
@@ -618,23 +799,23 @@ function TwoDoorsSection() {
   )
 }
 
-// ─── 2D: Build Your World ─────────────────────────────────────────────────────
+// ─── 2D: Build ───────────────────────────────────────────────────────────────
 function BuildSection() {
   const cards = [
-    { icon: '◈', title: 'Custom 3D Dimension', body: 'A purpose-built virtual world themed to your brand, film, property, or IP — not a template. Your story. Your architecture. Your dimension.' },
-    { icon: '◎', title: 'AR & VR Ready', body: 'Every world we build is AR and VR compatible. Investors walk through your project on a headset before committing capital.' },
-    { icon: '◉', title: 'Compliance Built In', body: 'Securities compliance is baked into every offering structure. Reg CF, Reg D, and hybrid offerings — handled end to end.' },
-    { icon: '⬡', title: 'Investor Universe', body: 'Your investors get a personal universe — all holdings, distributions, and updates in one immersive interdimensional portfolio.' },
+    { icon: '◈', title: 'Your Own 3D World', body: 'A purpose-built immersive experience around your film, property, artist, or brand. Not a template — a world. Investors step inside what they\'re investing in.' },
+    { icon: '◎', title: 'AR & VR Compatible', body: 'Every world we build works on desktop, mobile, headset, and AR. Investors can literally walk through your project before committing capital.' },
+    { icon: '◉', title: 'Compliance Built In', body: 'We handle the securities structure — Reg CF, Reg D, or simultaneous raises. The world is the offering. The compliance is already there.' },
+    { icon: '⬡', title: 'Massive Audience Access', body: 'Fraction Universe brings your offering to an audience of everyday investors who want to own something extraordinary. Not just capital — community.' },
   ]
   return (
     <section className="section section-dark">
       <div className="section-inner">
-        <p className="eyebrow">For Creators & Companies</p>
-        <h2 className="section-h">We Build Your Dimension</h2>
+        <p className="eyebrow">For Filmmakers, Artists & Developers</p>
+        <h2 className="section-h">We build the world. You raise the capital.</h2>
         <p className="section-sub">
-          Every company, film, artist, and property deserves its own world.
-          We replace the generic crowdfunding page with an immersive 3D dimension
-          that gives your investors somewhere worth entering.
+          If you have a film, a property, a brand, an artist, or anything people aspire to own
+          a piece of — we build you a 3D world and put it in front of everyone.
+          FractionKings.com is proof. You could be next.
         </p>
         <div className="build-grid">
           {cards.map(c => (
@@ -647,7 +828,7 @@ function BuildSection() {
         </div>
         <div style={{ textAlign: 'center', marginTop: '52px' }}>
           <a href="https://fractionkings.com/contact" className="build-cta" target="_blank" rel="noopener noreferrer">
-            Apply to Open Your Dimension →
+            Apply to Open Your World →
           </a>
         </div>
       </div>
@@ -661,24 +842,24 @@ function CTASection() {
     <section className="section cta-section">
       <div className="section-inner" style={{ textAlign: 'center' }}>
         <div className="cta-orb" />
-        <p className="eyebrow">The Universe Has No Ceiling</p>
-        <h2 className="cta-h">New dimensions<br />are opening.</h2>
+        <p className="eyebrow">The Universe Is Expanding</p>
+        <h2 className="cta-h">The door is open.<br />Step through it.</h2>
         <p className="cta-sub">
-          The Studio. The Estate. The Stage. The Lab.
-          Get early access the moment each dimension opens — and own a fraction of everything.
+          The Kingdom is live now. The Studio, The Estate, The Stage, and The Lab are opening.
+          Get in early — and own a fraction of everything.
         </p>
         <div className="cta-btns">
           <a href="https://fractionkings.com" className="cta-primary" target="_blank" rel="noopener noreferrer">
             Enter The Kingdom →
           </a>
           <a href="https://fractionkings.com/contact" className="cta-secondary" target="_blank" rel="noopener noreferrer">
-            Open Early Access
+            Get Early Access
           </a>
         </div>
         <p className="cta-legal">
-          Fraction Universe Inc. operates under applicable federal securities laws.
-          Reg CF offerings are available to all US investors subject to individual investment limits.
-          Reg D 506(c) offerings are limited to verified accredited investors.
+          Fraction Universe Inc. is building a FINRA-registered Reg CF crowdfunding portal.
+          Reg CF offerings will be available to all US investors subject to individual investment limits.
+          Reg D 506(c) offerings on FractionKings.com are limited to verified accredited investors.
           Investing involves risk, including loss of principal.
         </p>
       </div>
@@ -693,7 +874,7 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-brand">
           <span className="footer-wm">FRACTION UNIVERSE</span>
-          <p className="footer-tag">Fractalizing everything. Every dimension. Every investor.</p>
+          <p className="footer-tag">Own a fraction of everything that matters.</p>
         </div>
         <div className="footer-links">
           <a href="https://fractionkings.com" target="_blank" rel="noopener noreferrer">The Kingdom</a>
@@ -754,7 +935,6 @@ export default function App() {
       {/* Fixed UI overlay */}
       <div className="overlay">
 
-        {/* Nav */}
         <nav className={`fu-nav${scrolled ? ' scrolled' : ''}`}>
           <span className="fu-wordmark">FRACTION UNIVERSE</span>
           <div className="nav-right">
@@ -765,7 +945,6 @@ export default function App() {
           </div>
         </nav>
 
-        {/* Hero */}
         <AnimatePresence>
           {!selectedWorld && (
             <motion.div
@@ -775,23 +954,22 @@ export default function App() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.55, delay: 0.15 }}
             >
-              <p className="hero-eyebrow">Fractalizing Reality</p>
-              <h1 className="hero-title">The Universe<br />is Yours.</h1>
+              <p className="hero-eyebrow">Immersive 3D Investment Platform</p>
+              <h1 className="hero-title">You've always<br />watched. Now<br />you own it.</h1>
               <p className="hero-sub">
-                Five immersive dimensions. Every asset class.<br />
-                Every investor — welcome.
+                Film. Art. Real estate. Artists. Celebrities.<br />
+                In 3D worlds built for everyday investors.
               </p>
               <div className="hero-ctas">
                 <a href="https://fractionkings.com" className="hero-btn-primary" target="_blank" rel="noopener noreferrer">
                   Enter The Kingdom →
                 </a>
-                <a href="#worlds" className="hero-btn-secondary">Explore Worlds ↓</a>
+                <a href="#worlds" className="hero-btn-secondary">See What You Can Own ↓</a>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Click hint */}
         <AnimatePresence>
           {!selectedWorld && !IS_MOBILE && (
             <motion.p
@@ -806,7 +984,6 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* Mobile world buttons */}
         {IS_MOBILE && !selectedWorld && (
           <div className="mobile-btns">
             {WORLDS.map(w => (
@@ -823,7 +1000,6 @@ export default function App() {
           </div>
         )}
 
-        {/* World panel */}
         <AnimatePresence>
           {selectedWorld && (
             <WorldPanel world={selectedWorld} onClose={handleClose} />
@@ -834,9 +1010,10 @@ export default function App() {
 
       {/* Scrollable 2D content */}
       <div className="scroll-content">
-        <ManifestoSection />
-        <WorldsSection onFocus={handleFocusFromGrid} />
-        <HowSection />
+        <OpeningSection />
+        <WhatYouCanOwnSection />
+        <ProofSection />
+        <ExperienceSection />
         <TwoDoorsSection />
         <BuildSection />
         <CTASection />

@@ -13,6 +13,7 @@ export interface World {
   position: [number, number, number]
   scale: number
   hasRing: boolean
+  hasCastle?: boolean
   status: 'LIVE' | 'COMING'
   href: string | null
 }
@@ -39,8 +40,55 @@ export const WORLDS: World[] = [
     position: [0, 0, 0],
     scale: 1.5,
     hasRing: true,
+    hasCastle: true,
     status: 'LIVE',
     href: 'https://fractionkings.com',
+  },
+  {
+    id: 'anvl',
+    name: 'ANVL',
+    subtitle: 'Film Production · ANVL Entertainment',
+    tagline: 'Where the next billion-dollar story begins.',
+    regulation: 'Reg D / Reg CF',
+    regLabel: 'Accredited + All Investors',
+    description:
+      'ANVL Entertainment is the production company behind INDIGO — a supernatural thriller produced by Lucas Foster ($4B+ worldwide box office). Own a fraction of a major motion picture before it reaches global distribution. Dual-tranche: Reg D packaging on FractionKings, Reg CF community offering on FractionUniverse.',
+    features: [
+      'INDIGO — Supernatural thriller by Lucas Foster',
+      'Reg D packaging tranche — live on FractionKings',
+      'Reg CF community tranche — coming on FractionUniverse',
+      'ANVL × FractionKings MOU — April 2026',
+    ],
+    color: '#c0392b',
+    emissiveColor: '#6b1a14',
+    position: [9, 1.5, -5],
+    scale: 1.05,
+    hasRing: false,
+    status: 'COMING',
+    href: 'https://fractionkings.com',
+  },
+  {
+    id: 'nimble',
+    name: 'NIMBLE™',
+    subtitle: 'E3S · AI in Orbit',
+    tagline: 'Patented AI hardware. Already in space. Now in your portfolio.',
+    regulation: 'Reg CF',
+    regLabel: 'Open to All Investors',
+    description:
+      'E3S is a NASA Stennis partner and SBA 8(a) SDVOSB. Their NIMBLE™ platform — Networked Intelligent Machine for Behavioral Learning Emulation — is a patented autonomous AI system with hardware already in orbit aboard SpaceX Transporter 10. This is space technology fractional ownership, accessible to everyone.',
+    features: [
+      'NIMBLE™ — Patented autonomous AI, hardware in orbit',
+      'SpaceX Transporter 10 — mission heritage',
+      'NASA Stennis partnership',
+      'SBA 8(a) Service-Disabled Veteran-Owned',
+    ],
+    color: '#00b4d8',
+    emissiveColor: '#005f73',
+    position: [-4, -3.5, -8],
+    scale: 0.88,
+    hasRing: false,
+    status: 'COMING',
+    href: null,
   },
   {
     id: 'studio',
