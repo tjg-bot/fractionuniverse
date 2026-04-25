@@ -4,82 +4,271 @@ import {
 } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 import { WORLDS, type World } from './worlds'
 import './App.css'
 
-// ─── Platform detection ───────────────────────────────────────────────────────
 const IS_MOBILE = typeof window !== 'undefined' && (
   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
   window.innerWidth < 768
 )
 
-// ─── 3D: Deep space star field ────────────────────────────────────────────────
-function DeepStars() {
-  const ref = useRef<THREE.Points>(null)
-  const COUNT = 2800
-  const positions = useMemo(() => {
-    const arr = new Float32Array(COUNT * 3)
+// ─── Galaxy spiral disc ───────────────────────────────────────────────────────
+function GalaxyDisc() {
+  const COUNT = IS_MOBILE ? 3500 : 7000
+
+  const { geo, mat } = useMemo(() => {
+    const positions = new Float32Array(COUNT * 3)
+    const colors    = new Float32Array(COUNT * 3)
+
     for (let i = 0; i < COUNT; i++) {
-      const r = 55 + Math.random() * 85
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
-      arr[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
-      arr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      arr[i * 3 + 2] = r * Math.cos(phi)
+      const arm     = Math.floor(Math.random() * 3)
+      const r       = 12 + Math.pow(Math.random(), 0.6) * 60
+      const baseAng = arm * (Math.PI * 2 / 3)
+      const twist   = r * 0.06
+      const scatter = (1 - r / 72) * 0.8 + 0.2
+      const angle   = baseAng + twist + (Math.random() - 0.5) * scatter
+
+      positions[i * 3]     = Math.cos(angle) * r + (Math.random() - 0.5) * r * 0.1
+      positions[i * 3 + 1] = (Math.random() - 0.5) * Math.max(0.5, 4 - r * 0.04)
+      positions[i * 3 + 2] = Math.sin(angle) * r + (Math.random() - 0.5) * r * 0.1 - 30
+
+      const t = r / 72
+      const b = 0.35 + Math.random() * 0.55
+      if (Math.random() < 0.35) { // warm core
+        colors[i * 3]     = b * (1.0 - t * 0.1)
+        colors[i * 3 + 1] = b * (0.75 - t * 0.25)
+        colors[i * 3 + 2] = b * (0.3 + t * 0.4)
+      } else { // cool blue arm
+        colors[i * 3]     = b * 0.4
+        colors[i * 3 + 1] = b * (0.55 + t * 0.2)
+        colors[i * 3 + 2] = b * (0.85 + Math.random() * 0.15)
+      }
     }
-    return arr
+
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    g.setAttribute('color',    new THREE.BufferAttribute(colors, 3))
+
+    const m = new THREE.PointsMaterial({
+      size: IS_MOBILE ? 0.28 : 0.2,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.7,
+      sizeAttenuation: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+
+    return { geo: g, mat: m }
+  }, [COUNT])
+
+  useEffect(() => () => { geo.dispose(); mat.dispose() }, [geo, mat])
+
+  const ref = useRef<THREE.Points>(null)
+  useFrame(({ clock }) => {
+    if (ref.current) ref.current.rotation.y = clock.elapsedTime * 0.006
+  })
+
+  return <points ref={ref} geometry={geo} material={mat} />
+}
+
+// ─── Deep star field ──────────────────────────────────────────────────────────
+function DeepStars() {
+  const COUNT = IS_MOBILE ? 1800 : 3500
+
+  const { geo, mat } = useMemo(() => {
+    const positions = new Float32Array(COUNT * 3)
+    const colors    = new Float32Array(COUNT * 3)
+
+    for (let i = 0; i < COUNT; i++) {
+      const r     = 65 + Math.random() * 110
+      const theta = Math.random() * Math.PI * 2
+      const phi   = Math.acos(2 * Math.random() - 1)
+      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+      positions[i * 3 + 2] = r * Math.cos(phi)
+
+      const type = Math.random()
+      const b = 0.5 + Math.random() * 0.5
+      if      (type < 0.08) { colors[i*3]=b;         colors[i*3+1]=b*0.35; colors[i*3+2]=b*0.2  } // red
+      else if (type < 0.18) { colors[i*3]=b*0.95;    colors[i*3+1]=b*0.6;  colors[i*3+2]=b*0.15 } // orange
+      else if (type < 0.32) { colors[i*3]=b;         colors[i*3+1]=b*0.9;  colors[i*3+2]=b*0.45 } // yellow
+      else                  { colors[i*3]=b*0.6;     colors[i*3+1]=b*0.75; colors[i*3+2]=b      } // blue-white
+    }
+
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    g.setAttribute('color',    new THREE.BufferAttribute(colors, 3))
+
+    const m = new THREE.PointsMaterial({
+      size: 0.32,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.9,
+      sizeAttenuation: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+
+    return { geo: g, mat: m }
+  }, [COUNT])
+
+  useEffect(() => () => { geo.dispose(); mat.dispose() }, [geo, mat])
+
+  const ref = useRef<THREE.Points>(null)
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.rotation.y = clock.elapsedTime * 0.0025
+      ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.0018) * 0.04
+    }
+  })
+
+  return <points ref={ref} geometry={geo} material={mat} />
+}
+
+// ─── Nebula clouds ────────────────────────────────────────────────────────────
+const NEBULA_CONFIG = [
+  { color: [0.18, 0.04, 0.55], count: 700, spread: [34, 14, 28], center: [10,  5, -28] },
+  { color: [0.04, 0.15, 0.42], count: 600, spread: [28, 10, 22], center: [-16,-3, -32] },
+  { color: [0.35, 0.03, 0.28], count: 550, spread: [22,  9, 20], center: [3,  10, -38] },
+  { color: [0.02, 0.28, 0.22], count: 480, spread: [20,  8, 17], center: [-8, -7, -22] },
+  { color: [0.28, 0.12, 0.04], count: 420, spread: [25,  9, 20], center: [18, -4, -30] },
+]
+
+function NebulaClouds() {
+  const { geo, mat } = useMemo(() => {
+    const total     = NEBULA_CONFIG.reduce((s, n) => s + n.count, 0)
+    const positions = new Float32Array(total * 3)
+    const colors    = new Float32Array(total * 3)
+    let idx = 0
+
+    for (const nc of NEBULA_CONFIG) {
+      for (let i = 0; i < nc.count; i++) {
+        positions[idx*3]   = nc.center[0] + (Math.random()-0.5)*nc.spread[0]
+        positions[idx*3+1] = nc.center[1] + (Math.random()-0.5)*nc.spread[1]
+        positions[idx*3+2] = nc.center[2] + (Math.random()-0.5)*nc.spread[2]
+        const f = 0.25 + Math.random() * 0.75
+        colors[idx*3]   = nc.color[0] * f
+        colors[idx*3+1] = nc.color[1] * f
+        colors[idx*3+2] = nc.color[2] * f
+        idx++
+      }
+    }
+
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    g.setAttribute('color',    new THREE.BufferAttribute(colors, 3))
+
+    const m = new THREE.PointsMaterial({
+      size: 1.2,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.2,
+      sizeAttenuation: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+
+    return { geo: g, mat: m }
   }, [])
 
-  useFrame(({ clock }) => {
-    if (!ref.current) return
-    ref.current.rotation.y = clock.elapsedTime * 0.004
-    ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.002) * 0.04
+  useEffect(() => () => { geo.dispose(); mat.dispose() }, [geo, mat])
+
+  return <points geometry={geo} material={mat} />
+}
+
+// ─── Shooting stars ───────────────────────────────────────────────────────────
+type StarState = {
+  active: boolean; life: number; maxLife: number
+  x: number; y: number; z: number
+  dx: number; dy: number; dz: number
+  delay: number
+}
+
+function ShootingStars() {
+  const COUNT  = 5
+  const grpRef = useRef<THREE.Group>(null)
+  const stRef  = useRef<StarState[]>(
+    Array.from({ length: COUNT }, (_, i) => ({
+      active: false, life: 0, maxLife: 0,
+      x: 0, y: 0, z: 0, dx: 0, dy: 0, dz: 0,
+      delay: i * 4.5 + Math.random() * 10,
+    }))
+  )
+
+  useFrame((_, dt) => {
+    if (!grpRef.current) return
+    const meshes = grpRef.current.children as THREE.Mesh[]
+
+    stRef.current.forEach((s, i) => {
+      const mesh = meshes[i]
+      if (!mesh) return
+
+      if (!s.active) {
+        s.delay -= dt
+        if (s.delay <= 0) {
+          s.active = true; s.life = 0
+          s.maxLife = 1.5 + Math.random() * 1.5
+          s.x = (Math.random() - 0.5) * 60
+          s.y = 12 + Math.random() * 18
+          s.z = -5 - Math.random() * 25
+          s.dx = (Math.random() - 0.5) * 0.4
+          s.dy = -(0.5 + Math.random() * 0.5)
+          s.dz = -0.05
+          s.delay = 9 + Math.random() * 14
+          mesh.visible = true
+        } else { mesh.visible = false }
+        return
+      }
+
+      s.life += dt
+      s.x += s.dx * dt * 60
+      s.y += s.dy * dt * 60
+      s.z += s.dz * dt * 60
+      mesh.position.set(s.x, s.y, s.z)
+
+      const t    = s.life / s.maxLife
+      const fade = t < 0.1 ? t / 0.1 : t > 0.7 ? 1 - (t - 0.7) / 0.3 : 1
+      ;(mesh.material as THREE.MeshBasicMaterial).opacity = fade * 0.9
+
+      if (s.life >= s.maxLife) { s.active = false; mesh.visible = false }
+    })
   })
 
   return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial color="#c8d4ff" size={0.2} transparent opacity={0.7} sizeAttenuation depthWrite={false} />
-    </points>
+    <group ref={grpRef}>
+      {Array.from({ length: COUNT }, (_, i) => (
+        <mesh key={i} visible={false}>
+          <sphereGeometry args={[0.08, 4, 4]} />
+          <meshBasicMaterial color="#e8f0ff" transparent opacity={0} />
+        </mesh>
+      ))}
+    </group>
   )
 }
 
-// ─── 3D: Nebula particle clouds ────────────────────────────────────────────────
-function NebulaClouds() {
-  const defs = useMemo(() => [
-    { color: '#2a1a6a', count: 550, spread: 26, offset: [10, 5, -16] as [number,number,number] },
-    { color: '#0f3a1a', count: 480, spread: 20, offset: [-13, -4, -18] as [number,number,number] },
-    { color: '#3d0a5a', count: 500, spread: 24, offset: [2, 9, -22] as [number,number,number] },
-  ], [])
+// ─── Atmosphere glow ──────────────────────────────────────────────────────────
+function AtmosphereGlow({ color, radius }: { color: string; radius: number }) {
+  const mat = useMemo(() => new THREE.MeshBasicMaterial({
+    color: new THREE.Color(color),
+    transparent: true,
+    opacity: 0.13,
+    side: THREE.BackSide,
+    depthWrite: false,
+  }), [color])
+
+  useEffect(() => () => mat.dispose(), [mat])
 
   return (
-    <>
-      {defs.map((d, ci) => {
-        const pos = new Float32Array(d.count * 3)
-        for (let i = 0; i < d.count; i++) {
-          pos[i * 3]     = d.offset[0] + (Math.random() - 0.5) * d.spread
-          pos[i * 3 + 1] = d.offset[1] + (Math.random() - 0.5) * d.spread * 0.5
-          pos[i * 3 + 2] = d.offset[2] + (Math.random() - 0.5) * d.spread * 0.7
-        }
-        return (
-          <points key={ci}>
-            <bufferGeometry>
-              <bufferAttribute attach="attributes-position" args={[pos, 3]} />
-            </bufferGeometry>
-            <pointsMaterial color={d.color} size={0.5} transparent opacity={0.16} sizeAttenuation depthWrite={false} />
-          </points>
-        )
-      })}
-    </>
+    <mesh material={mat}>
+      <sphereGeometry args={[radius * 1.24, 24, 18]} />
+    </mesh>
   )
 }
 
-// ─── 3D: World planet ─────────────────────────────────────────────────────────
+// ─── World planet ─────────────────────────────────────────────────────────────
 function WorldPlanet({
   world, isSelected, isAny, onClick,
 }: {
@@ -92,35 +281,40 @@ function WorldPlanet({
   const mat = useMemo(() => new THREE.MeshStandardMaterial({
     color: world.color,
     emissive: new THREE.Color(world.emissiveColor),
-    emissiveIntensity: isSelected ? 1.8 : hovered ? 1.1 : 0.6,
-    roughness: 0.5,
-    metalness: 0.5,
+    emissiveIntensity: isSelected ? 2.0 : hovered ? 1.3 : 0.7,
+    roughness: 0.42,
+    metalness: 0.55,
   }), [world, isSelected, hovered])
 
-  const ringMat = useMemo(() => world.hasRing ? new THREE.MeshStandardMaterial({
-    color: world.ringColor ?? world.color,
-    emissive: new THREE.Color(world.emissiveColor),
-    emissiveIntensity: 0.9,
-    roughness: 0.5,
-    metalness: 0.5,
-    transparent: true,
-    opacity: 0.5,
-    side: THREE.DoubleSide,
-  }) : null, [world])
+  const ringMat = useMemo(() => world.hasRing
+    ? new THREE.MeshStandardMaterial({
+        color: world.ringColor ?? world.color,
+        emissive: new THREE.Color(world.emissiveColor),
+        emissiveIntensity: 1.2,
+        roughness: 0.4,
+        metalness: 0.6,
+        transparent: true,
+        opacity: 0.55,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      })
+    : null, [world])
 
   useEffect(() => () => { mat.dispose(); ringMat?.dispose() }, [mat, ringMat])
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return
-    meshRef.current.rotation.y += 0.0018 + world.scale * 0.0008
-    meshRef.current.position.y = world.position[1] + Math.sin(clock.elapsedTime * 0.45 + world.position[0]) * 0.18
-    const target = isSelected ? 1.2 : hovered ? 1.1 : 1.0
-    const cur = meshRef.current.scale.x
-    meshRef.current.scale.setScalar(cur + (target - cur) * 0.09)
+    meshRef.current.rotation.y += 0.0016 + world.scale * 0.0007
+    meshRef.current.position.y =
+      world.position[1] + Math.sin(clock.elapsedTime * 0.42 + world.position[0]) * 0.2
+
+    const target = isSelected ? 1.22 : hovered ? 1.1 : 1.0
+    const cur    = meshRef.current.scale.x
+    meshRef.current.scale.setScalar(cur + (target - cur) * 0.08)
 
     if (glowRef.current) {
-      const pulse = 0.78 + 0.22 * Math.sin(clock.elapsedTime * 1.3 + world.position[0])
-      glowRef.current.intensity = (isSelected ? 5.5 : hovered ? 3.2 : isAny ? 0.8 : 2.2) * pulse
+      const pulse = 0.75 + 0.25 * Math.sin(clock.elapsedTime * 1.2 + world.position[0])
+      glowRef.current.intensity = (isSelected ? 6 : hovered ? 3.5 : isAny ? 1 : 2.5) * pulse
     }
   })
 
@@ -131,6 +325,8 @@ function WorldPlanet({
 
   return (
     <group position={world.position}>
+      <AtmosphereGlow color={world.color} radius={world.scale} />
+
       <mesh
         ref={meshRef}
         material={mat}
@@ -138,21 +334,35 @@ function WorldPlanet({
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
-        <sphereGeometry args={[world.scale, 52, 36]} />
+        <sphereGeometry args={[world.scale, 64, 48]} />
       </mesh>
 
       {world.hasRing && ringMat && (
         <mesh rotation={[Math.PI / 2.5, 0, 0.25]} material={ringMat}>
-          <torusGeometry args={[world.scale * 1.65, world.scale * 0.055, 4, 90]} />
+          <torusGeometry args={[world.scale * 1.65, world.scale * 0.065, 3, 120]} />
         </mesh>
       )}
 
-      <pointLight ref={glowRef} color={world.color} intensity={2.2} distance={isSelected ? 16 : 9} decay={2} />
+      <pointLight
+        ref={glowRef}
+        color={world.color}
+        intensity={2.5}
+        distance={isSelected ? 18 : 10}
+        decay={2}
+      />
 
       {!IS_MOBILE && (
-        <Html position={[0, world.scale * 1.38, 0]} center distanceFactor={13} occlude={false} style={{ pointerEvents: 'none' }}>
-          <div className={`world-label${isSelected ? ' selected' : ''}${isAny && !isSelected ? ' dimmed' : ''}`}
-               style={{ '--wc': world.color } as CSSProperties}>
+        <Html
+          position={[0, world.scale * 1.42, 0]}
+          center
+          distanceFactor={13}
+          occlude={false}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            className={`world-label${isSelected ? ' selected' : ''}${isAny && !isSelected ? ' dimmed' : ''}`}
+            style={{ '--wc': world.color } as CSSProperties}
+          >
             <span className="wl-name">{world.name}</span>
             {world.status === 'LIVE' && <span className="wl-live">LIVE</span>}
           </div>
@@ -162,7 +372,7 @@ function WorldPlanet({
   )
 }
 
-// ─── 3D: Camera easing toward selected world ──────────────────────────────────
+// ─── Camera easing ────────────────────────────────────────────────────────────
 function CameraFocus({ target }: { target: [number,number,number] | null }) {
   const { camera } = useThree()
   const dest = useRef(new THREE.Vector3(0, 3, 13))
@@ -170,8 +380,7 @@ function CameraFocus({ target }: { target: [number,number,number] | null }) {
   useEffect(() => {
     if (target) {
       const [tx, ty, tz] = target
-      const d = new THREE.Vector3(tx, ty, tz)
-      const n = d.clone().normalize()
+      const n = new THREE.Vector3(tx, ty, tz).normalize()
       dest.current.set(tx - n.x * 5.5, ty + 1.2, tz - n.z * 3.5 + 4)
     } else {
       dest.current.set(0, 3, 13)
@@ -182,7 +391,7 @@ function CameraFocus({ target }: { target: [number,number,number] | null }) {
   return null
 }
 
-// ─── 3D: Scene ────────────────────────────────────────────────────────────────
+// ─── Universe scene ───────────────────────────────────────────────────────────
 function UniverseScene({
   selectedWorld, onSelectWorld,
 }: {
@@ -191,11 +400,15 @@ function UniverseScene({
   return (
     <>
       <color attach="background" args={['#010208']} />
-      <fog attach="fog" args={['#010208', 45, 115]} />
-      <ambientLight intensity={0.1} color="#1a1a3a" />
-      <pointLight position={[0, 20, 8]} color="#ffffff" intensity={0.25} />
+      <fog attach="fog" args={['#010208', 55, 130]} />
+      <ambientLight intensity={0.08} color="#1a1535" />
+      <pointLight position={[0, 25, 10]} color="#ffffff" intensity={0.2} />
+
+      <GalaxyDisc />
       <DeepStars />
       <NebulaClouds />
+      {!IS_MOBILE && <ShootingStars />}
+
       {WORLDS.map(w => (
         <WorldPlanet
           key={w.id}
@@ -205,26 +418,23 @@ function UniverseScene({
           onClick={onSelectWorld}
         />
       ))}
+
       <CameraFocus target={selectedWorld?.position ?? null} />
+
       <OrbitControls
         enableZoom={false}
         enablePan={false}
         autoRotate
-        autoRotateSpeed={0.22}
+        autoRotateSpeed={0.18}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 1.5}
         makeDefault
       />
-      {!IS_MOBILE && (
-        <EffectComposer multisampling={0}>
-          <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.45} intensity={3.8} />
-        </EffectComposer>
-      )}
     </>
   )
 }
 
-// ─── 2D: World info panel ─────────────────────────────────────────────────────
+// ─── World info panel ─────────────────────────────────────────────────────────
 function WorldPanel({ world, onClose }: { world: World; onClose: () => void }) {
   return (
     <motion.div
@@ -436,7 +646,7 @@ function CTASection() {
   )
 }
 
-// ─── 2D: Footer ───────────────────────────────────────────────────────────────
+// ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
   return (
     <footer className="fu-footer">
@@ -460,7 +670,7 @@ function Footer() {
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [selectedWorld, setSelectedWorld] = useState<World | null>(null)
-  const [scrolled, setScrolled] = useState(false)
+  const [scrolled, setScrolled]           = useState(false)
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50)
@@ -488,11 +698,10 @@ export default function App() {
         <Canvas
           camera={{ position: [0, 3, 13], fov: 52 }}
           dpr={IS_MOBILE ? [1, 1] : [1, 1.5]}
-          gl={{
-            antialias: !IS_MOBILE,
-            powerPreference: 'high-performance',
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1.4,
+          gl={{ antialias: !IS_MOBILE, powerPreference: 'high-performance' }}
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping
+            gl.toneMappingExposure = 1.4
           }}
           performance={{ min: 0.5 }}
         >
@@ -516,7 +725,7 @@ export default function App() {
           </div>
         </nav>
 
-        {/* Hero text — hidden when a world is selected */}
+        {/* Hero */}
         <AnimatePresence>
           {!selectedWorld && (
             <motion.div
@@ -542,7 +751,7 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* Desktop: click hint */}
+        {/* Click hint */}
         <AnimatePresence>
           {!selectedWorld && !IS_MOBILE && (
             <motion.p
@@ -557,7 +766,7 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* Mobile: world buttons */}
+        {/* Mobile world buttons */}
         {IS_MOBILE && !selectedWorld && (
           <div className="mobile-btns">
             {WORLDS.map(w => (
@@ -574,7 +783,7 @@ export default function App() {
           </div>
         )}
 
-        {/* World info panel */}
+        {/* World panel */}
         <AnimatePresence>
           {selectedWorld && (
             <WorldPanel world={selectedWorld} onClose={handleClose} />
@@ -583,7 +792,7 @@ export default function App() {
 
       </div>
 
-      {/* Scrollable 2D content — sits below the 100vh canvas */}
+      {/* Scrollable 2D content */}
       <div className="scroll-content">
         <WorldsSection onFocus={handleFocusFromGrid} />
         <HowSection />
