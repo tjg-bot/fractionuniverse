@@ -80,7 +80,7 @@ function IndigoPasswordGate({ onUnlock }: { onUnlock: () => void }) {
   )
 }
 
-// ─── The Void — canvas particle field ─────────────────────────────────────────
+// ─── The Void   canvas particle field ─────────────────────────────────────────
 function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -102,7 +102,7 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
       hue: 240 + Math.random() * 60,
     }))
 
-    // Creatures — abstract drifting entities
+    // Creatures   abstract drifting entities
     type C = { x: number; y: number; vx: number; vy: number; a: number; da: number; scale: number; type: number; rot: number; drot: number }
     const creatures: C[] = Array.from({ length: 5 }, (_, i) => ({
       x: (i + 0.5) * (W / 5), y: H * 0.3 + Math.random() * H * 0.4,
@@ -129,7 +129,7 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
       ctx.fillStyle = bg
       ctx.fillRect(0, 0, W, H)
 
-      // Consciousness sine wave — the brain-wave flatline that isn't
+      // Consciousness sine wave   the brain-wave flatline that isn't
       ctx.save()
       ctx.beginPath()
       for (let x = 0; x < W; x++) {
@@ -185,7 +185,7 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
         ctx.fillStyle = 'rgba(100,80,200,0.08)'
 
         if (c.type === 0) {
-          // The Remnant — fragmented shards
+          // The Remnant   fragmented shards
           ctx.beginPath()
           ctx.moveTo(0, -40); ctx.lineTo(14, -10); ctx.lineTo(30, -20); ctx.lineTo(22, 10)
           ctx.lineTo(40, 30); ctx.lineTo(8, 20); ctx.lineTo(0, 45); ctx.lineTo(-8, 20)
@@ -195,12 +195,12 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
           ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(5, 0); ctx.moveTo(0, -40); ctx.lineTo(-5, 0)
           ctx.stroke()
         } else if (c.type === 1) {
-          // The Keeper — tall elongated form with too many limbs
+          // The Keeper   tall elongated form with too many limbs
           ctx.beginPath()
           ctx.ellipse(0, -20, 8, 22, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke()
           // Body
           ctx.beginPath(); ctx.moveTo(0, 2); ctx.lineTo(0, 38); ctx.stroke()
-          // Limbs — pairs at wrong angles
+          // Limbs   pairs at wrong angles
           const limbs = [[-5, 8, -28, -8], [5, 8, 28, -8], [-4, 16, -32, 26], [4, 16, 32, 26],
                          [-3, 24, -20, 40], [3, 24, 20, 40], [-5, 30, -35, 18], [5, 30, 35, 18]]
           for (const [x1,y1,x2,y2] of limbs) {
@@ -212,7 +212,7 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
             ctx.fillStyle = 'rgba(200,180,255,0.8)'; ctx.fill()
           }
         } else {
-          // The Mirror — perfect human silhouette, hollow inside
+          // The Mirror   perfect human silhouette, hollow inside
           ctx.beginPath()
           // Head
           ctx.arc(0, -34, 10, 0, Math.PI * 2)
@@ -228,7 +228,7 @@ function IndigoVoidCanvas({ height = 320 }: { height?: number }) {
           ctx.moveTo(-12, -18); ctx.lineTo(-38, 2)
           ctx.moveTo(12, -18);  ctx.lineTo(38, 2)
           ctx.stroke()
-          // The hollow — what makes it wrong
+          // The hollow   what makes it wrong
           ctx.globalAlpha = c.a * 0.8
           ctx.fillStyle = '#04010f'
           ctx.beginPath()
@@ -309,14 +309,14 @@ function IndigoPod({ color = '#8877dd' }: { color?: string }) {
       {/* Depth sensor */}
       <line x1="160" y1="152" x2="160" y2="165" stroke={`${color}33`} strokeWidth="0.6" />
       <text x="160" y="174" textAnchor="middle" fill={`${color}55`} fontSize="7" fontFamily="monospace">12" EPSOM SALT SOLUTION</text>
-      {/* Glow at head — the moment of crossing */}
+      {/* Glow at head   the moment of crossing */}
       <circle cx="160" cy="96" r="22" fill="none" stroke={`${color}22`} strokeWidth="8" />
       <circle cx="160" cy="96" r="32" fill="none" stroke={`${color}10`} strokeWidth="12" />
     </svg>
   )
 }
 
-// ─── The In-Between — creatures and lore ──────────────────────────────────────
+// ─── The In-Between   creatures and lore ──────────────────────────────────────
 const IN_BETWEEN_ENTITIES = [
   {
     name: 'The Purgs',
@@ -333,13 +333,13 @@ const IN_BETWEEN_ENTITIES = [
         {[[22,30],[58,30],[18,50],[62,50],[25,64],[55,64]].map(([cx,cy],i) => (
           <circle key={i} cx={cx} cy={cy} r="1.5" fill={c} opacity="0.35" />
         ))}
-        {/* Loop arrow — the memory repeating */}
+        {/* Loop arrow   the memory repeating */}
         <path d="M 14 40 Q 10 20 30 14" fill="none" stroke={c} strokeWidth="0.8" opacity="0.5" strokeDasharray="3 2" />
         <polygon points="30,10 28,17 35,16" fill={c} opacity="0.5" />
       </svg>
     ),
     tagline: 'They didn\'t take their door. Now they can\'t find it.',
-    body: 'Souls who refused or missed their door — now lost in Indigo, frost-covered, mumbling the last loop of their living memory on repeat. They are drawn to the energy of lifelines. They are not malicious. They are desperate. And there are thousands of them.',
+    body: 'Souls who refused or missed their door   now lost in Indigo, frost-covered, mumbling the last loop of their living memory on repeat. They are drawn to the energy of lifelines. They are not malicious. They are desperate. And there are thousands of them.',
   },
   {
     name: 'The Door',
@@ -349,7 +349,7 @@ const IN_BETWEEN_ENTITIES = [
         <rect x="20" y="8" width="40" height="64" rx="2" fill="none" stroke={c} strokeWidth="1.5" opacity="0.9" />
         {/* Blue glow at edges */}
         <rect x="20" y="8" width="40" height="64" rx="2" fill="none" stroke="#4466ff" strokeWidth="3" opacity="0.25" />
-        {/* The void inside — deep space darkness */}
+        {/* The void inside   deep space darkness */}
         <rect x="22" y="10" width="36" height="60" rx="1" fill="#04010f" />
         {/* Stars inside the void */}
         {[[30,20],[45,25],[35,40],[50,35],[28,55],[42,60],[38,30],[55,50]].map(([sx,sy],i) => (
@@ -361,7 +361,7 @@ const IN_BETWEEN_ENTITIES = [
       </svg>
     ),
     tagline: 'Around its edges: blue light. Inside: a darkness that could be deep space.',
-    body: 'A monolithic black door. It appears behind you. Your reflection ripples in its surface. It does not wait — it calls. Every minute you spend in Indigo makes the door more visible. The door is already claiming you.',
+    body: 'A monolithic black door. It appears behind you. Your reflection ripples in its surface. It does not wait   it calls. Every minute you spend in Indigo makes the door more visible. The door is already claiming you.',
   },
   {
     name: 'The Mirror',
@@ -377,7 +377,7 @@ const IN_BETWEEN_ENTITIES = [
       </svg>
     ),
     tagline: 'It knows everything about you. Then it comes back wearing your face.',
-    body: 'The central question of INDIGO: Sarah enters the pod at 11:04 PM. Her EEG flatlines — not death, not sleep, something the monitors have no category for. She resurfaces at 12:03 AM knowing the name of every person who has ever died in that facility. She was never told. When Sarah comes back through the door — is she the one who went in?',
+    body: 'The central question of INDIGO: Sarah enters the pod at 11:04 PM. Her EEG flatlines   not death, not sleep, something the monitors have no category for. She resurfaces at 12:03 AM knowing the name of every person who has ever died in that facility. She was never told. When Sarah comes back through the door   is she the one who went in?',
   },
 ]
 
@@ -447,7 +447,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
             <span className="io-badge">ANVL Entertainment</span>
             <span className="io-badge">Fraction Kings Capital Partner</span>
             <span className="io-badge">Reg CF · Phase 4</span>
-            <span className="io-badge io-badge-draft">DRAFT — Not Yet Live</span>
+            <span className="io-badge io-badge-draft">DRAFT   Not Yet Live</span>
           </div>
           <ViewInARButton
             glbUrl="/worlds/indigo-planet.glb"
@@ -504,13 +504,13 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
               <div className="io-section">
                 <h2 className="io-section-h">What is INDIGO?</h2>
                 <p className="io-section-body">
-                  INDIGO is an original supernatural thriller screenplay produced by ANVL Entertainment — the production company led by Lucas Foster, one of Hollywood's most accomplished independent producers with over $4 billion in worldwide box office across 50+ feature films.
+                  INDIGO is an original supernatural thriller screenplay produced by ANVL Entertainment   the production company led by Lucas Foster, one of Hollywood's most accomplished independent producers with over $4 billion in worldwide box office across 50+ feature films.
                 </p>
                 <p className="io-section-body">
                   Written by Alex Torres, INDIGO is a world built around a singular premise: <em>lost things finding their way home.</em> A supernatural drama with the scope of a wide-release theatrical film and the intimacy of a story that asks fundamental questions about identity, memory, and what we leave behind.
                 </p>
                 <p className="io-section-body">
-                  The offering is structured in phases. Phase 1 (Reg D 506(c) — Packaging, $2M, accredited investors only) is live at FractionKings.com. Phase 4 — the Reg CF Community Tranche — is what this page describes: up to $5,000,000 open to all US investors, once Fraction Universe's FINRA funding portal registration is complete.
+                  The offering is structured in phases. Phase 1 (Reg D 506(c)   Packaging, $2M, accredited investors only) is live at FractionKings.com. Phase 4   the Reg CF Community Tranche   is what this page describes: up to $5,000,000 open to all US investors, once Fraction Universe's FINRA funding portal registration is complete.
                 </p>
 
                 <div className="io-structure-card">
@@ -558,13 +558,13 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                     <p className="io-film-logline-lrg">"He died for sixteen minutes. She never came back. He found a way in."</p>
                     <p className="io-film-genre-tag">Supernatural Thriller · Drama · Original Screenplay by Lucas Foster</p>
                     <p className="io-section-body">
-                      Jonas Marker is twenty-two. MIT-bound. The night he proposes to Sarah Hudson, a car runs a red light on a mountain road. He dies for sixteen minutes — the longest documented legal death on record. He comes back. She doesn't. What Jonas can't accept is that while he was dead, he was somewhere. A world of perpetual twilight lit by a deep indigo hue. He saw Sarah there. He watched her door open. He has been trying to get back ever since.
+                      Jonas Marker is twenty-two. MIT-bound. The night he proposes to Sarah Hudson, a car runs a red light on a mountain road. He dies for sixteen minutes   the longest documented legal death on record. He comes back. She doesn't. What Jonas can't accept is that while he was dead, he was somewhere. A world of perpetual twilight lit by a deep indigo hue. He saw Sarah there. He watched her door open. He has been trying to get back ever since.
                     </p>
                     <p className="io-section-body">
-                      Dr. Nicholas Nyborg finds him in the hospital. Ex-CIA. Project Farsight. Dying of cancer. He runs a private clinic for people who died and came back — at a re-purposed seminary, sensory deprivation pods, a community of NDE survivors. He also needs to get back in. The pods are the mechanism. And every minute you spend in Indigo makes the door more visible.
+                      Dr. Nicholas Nyborg finds him in the hospital. Ex-CIA. Project Farsight. Dying of cancer. He runs a private clinic for people who died and came back   at a re-purposed seminary, sensory deprivation pods, a community of NDE survivors. He also needs to get back in. The pods are the mechanism. And every minute you spend in Indigo makes the door more visible.
                     </p>
                     <p className="io-section-body" style={{ fontStyle: 'italic', color: 'rgba(200,210,255,0.65)' }}>
-                      This is Lucas Foster's original screenplay — the film he chose to make after $4B at the worldwide box office. INDIGO is the first film by a producer of his calibre structured for retail investors under Reg CF. That is not a marketing line. It is a fact.
+                      This is Lucas Foster's original screenplay   the film he chose to make after $4B at the worldwide box office. INDIGO is the first film by a producer of his calibre structured for retail investors under Reg CF. That is not a marketing line. It is a fact.
                     </p>
                   </div>
                 </div>
@@ -595,7 +595,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                   <div className="io-phase-card" style={{ borderColor: `${INDIGO_COLOR}55` }}>
                     <span className="io-phase-n" style={{ color: INDIGO_COLOR }}>Phase 4</span>
                     <p className="io-phase-title">Community (You Are Here)</p>
-                    <p className="io-phase-body">Reg CF open to all US investors. Up to $5M. The community tranche — the part of INDIGO the public can own.</p>
+                    <p className="io-phase-body">Reg CF open to all US investors. Up to $5M. The community tranche   the part of INDIGO the public can own.</p>
                     <span className="io-phase-status pre">Pre-Launch · FractionUniverse.com</span>
                   </div>
                 </div>
@@ -607,7 +607,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
               <div className="io-section">
                 <h2 className="io-section-h">The In-Between</h2>
                 <p className="io-section-body" style={{ fontStyle: 'italic', color: `${INDIGO_COLOR}cc`, fontSize: 17, lineHeight: 1.7 }}>
-                  "A sensory deprivation pod. A procedure that clinics already offer. And a woman who comes back from the other side — with knowledge no living person should have."
+                  "A sensory deprivation pod. A procedure that clinics already offer. And a woman who comes back from the other side   with knowledge no living person should have."
                 </p>
 
                 {/* The void canvas */}
@@ -625,13 +625,13 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                   <div style={{ background: `${INDIGO_COLOR}08`, border: `1px solid ${INDIGO_COLOR}22`, borderRadius: 10, padding: '20px 18px' }}>
                     <p style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: `${INDIGO_COLOR}66`, marginBottom: 10 }}>The Science</p>
                     <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(210,220,255,0.75)', margin: 0 }}>
-                      Flotation REST (Restricted Environmental Stimulation Therapy) removes all external sensory input. No light. No sound. No gravity. The brain, deprived of external signal, turns inward — and in some subjects, further. Clinical studies at Laureate Institute for Brain Research document measurable altered states. INDIGO begins with the question: what if the altered state isn't inside the brain at all?
+                      Flotation REST (Restricted Environmental Stimulation Therapy) removes all external sensory input. No light. No sound. No gravity. The brain, deprived of external signal, turns inward   and in some subjects, further. Clinical studies at Laureate Institute for Brain Research document measurable altered states. INDIGO begins with the question: what if the altered state isn't inside the brain at all?
                     </p>
                   </div>
                   <div style={{ background: `${INDIGO_COLOR}08`, border: `1px solid ${INDIGO_COLOR}22`, borderRadius: 10, padding: '20px 18px' }}>
                     <p style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: `${INDIGO_COLOR}66`, marginBottom: 10 }}>The Breach</p>
                     <p style={{ fontSize: 14, lineHeight: 1.8, color: 'rgba(210,220,255,0.75)', margin: 0 }}>
-                      Sarah enters the pod at 11:04 PM. Her EEG flatlines at 11:47 — not death, not sleep, something the monitors have no category for. She resurfaces at 12:03 AM. She knows the name of every person who has died in that facility. She has never been told. The facility doesn't know she knows. The film begins here.
+                      Sarah enters the pod at 11:04 PM. Her EEG flatlines at 11:47   not death, not sleep, something the monitors have no category for. She resurfaces at 12:03 AM. She knows the name of every person who has died in that facility. She has never been told. The facility doesn't know she knows. The film begins here.
                     </p>
                   </div>
                 </div>
@@ -673,7 +673,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                 <div style={{ background: `linear-gradient(135deg, ${INDIGO_COLOR}12, transparent)`, border: `1px solid ${INDIGO_COLOR}33`, borderRadius: 10, padding: '22px 24px' }}>
                   <p style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: `${INDIGO_COLOR}66`, marginBottom: 10 }}>The World</p>
                   <p style={{ fontSize: 15, lineHeight: 1.8, color: 'rgba(220,225,255,0.8)', margin: 0 }}>
-                    INDIGO is not a closed story. The in-between is a place with geography, rules, and history. Sarah's crossing is the first documented breach. The film ends with the question of whether it can be closed — or whether opening it changed everything permanently. The world is already built. The franchise is already here.
+                    INDIGO is not a closed story. The in-between is a place with geography, rules, and history. Sarah's crossing is the first documented breach. The film ends with the question of whether it can be closed   or whether opening it changed everything permanently. The world is already built. The franchise is already here.
                   </p>
                 </div>
               </div>
@@ -683,11 +683,11 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
             {tab === 3 && (
               <div className="io-section">
 
-                {/* Lucas Foster — full cinematic hero card */}
+                {/* Lucas Foster   full cinematic hero card */}
                 <motion.div className="io-lucas-hero"
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                   <div className="io-lucas-img-wrap">
-                    <img src="/lucas-foster.webp" alt="Lucas Foster — Producer, ANVL Entertainment" className="io-lucas-img" />
+                    <img src="/lucas-foster.webp" alt="Lucas Foster   Producer, ANVL Entertainment" className="io-lucas-img" />
                     <div className="io-lucas-img-vignette" />
                     <div className="io-lucas-img-glow" style={{ background: `radial-gradient(ellipse at 50% 100%, ${INDIGO_COLOR}33 0%, transparent 65%)` }} />
                   </div>
@@ -714,7 +714,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                       Lucas Foster has produced, executive produced, or supervised more than 50 feature films. Films he has managed have grossed more than <strong>four billion dollars</strong> in worldwide sales. He attended Princeton University (applied physics) and UCLA (film studies), founded Warp Film at Columbia Pictures in 1996, and is a partner at ANVL Entertainment in Malibu, California.
                     </p>
                     <p className="io-lucas-bio" style={{ color: 'rgba(200,212,255,0.6)', fontStyle: 'italic', marginTop: 12 }}>
-                      INDIGO is his original screenplay — and for the first time, through Reg CF, a filmmaker with this track record is offering retail investors the chance to participate before the studio deal, before the cast, before the poster. This opportunity has not existed before at this price point. That is not marketing. That is the structure.
+                      INDIGO is his original screenplay   and for the first time, through Reg CF, a filmmaker with this track record is offering retail investors the chance to participate before the studio deal, before the cast, before the poster. This opportunity has not existed before at this price point. That is not marketing. That is the structure.
                     </p>
                     <div className="io-lucas-films">
                       <p className="io-lucas-films-label">Filmography includes</p>
@@ -735,7 +735,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                       initials: 'AT',
                       name: 'Alex Torres',
                       role: 'Screenwriter · INDIGO',
-                      bio: 'The creative architect behind the INDIGO screenplay — an original vision built to command screens and compel audiences worldwide.',
+                      bio: 'The creative architect behind the INDIGO screenplay   an original vision built to command screens and compel audiences worldwide.',
                       note: 'Full bio to be confirmed by ANVL Entertainment before offering launch.',
                     },
                     {
@@ -748,7 +748,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                     {
                       initials: 'GF',
                       name: 'Gus Fernandez',
-                      role: 'Executive — Sponsorship & Commercial · ANVL',
+                      role: 'Executive   Sponsorship & Commercial · ANVL',
                       bio: 'ANVL\'s designated representative for sponsorship and commercial partnerships on INDIGO.',
                       note: 'Full bio to be confirmed by ANVL Entertainment before offering launch.',
                     },
@@ -781,25 +781,25 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
             {tab === 4 && (
               <div className="io-section">
                 <div className="io-draft-banner">
-                  <strong>DRAFT</strong> — All terms are preliminary and subject to change pending securities counsel review and FINRA funding portal registration.
+                  <strong>DRAFT</strong>   All terms are preliminary and subject to change pending securities counsel review and FINRA funding portal registration.
                 </div>
-                <h2 className="io-section-h">Reg CF Community Tranche — Deal Terms</h2>
+                <h2 className="io-section-h">Reg CF Community Tranche   Deal Terms</h2>
                 <p className="io-section-body">
                   The following represents indicative terms for the INDIGO Reg CF community offering on Fraction Universe. No terms are final. No investment can be made at this time.
                 </p>
 
                 <div className="io-terms-grid">
                   {[
-                    { label: 'Regulation',             val: 'Regulation Crowdfunding (Reg CF) — 17 CFR Part 227' },
-                    { label: 'Offering Status',        val: 'Pre-Launch — Portal registration pending' },
+                    { label: 'Regulation',             val: 'Regulation Crowdfunding (Reg CF)   17 CFR Part 227' },
+                    { label: 'Offering Status',        val: 'Pre-Launch   Portal registration pending' },
                     { label: 'Indicative Maximum',     val: '$5,000,000' },
                     { label: 'Securities Offered',     val: 'Community Units (class and exact terms TBD by counsel)' },
                     { label: 'Price Per Unit',         val: 'TBD (indicative: $5.00/unit subject to counsel review)' },
-                    { label: 'Minimum Investment',     val: 'TBD — $100–$500 indicative range' },
+                    { label: 'Minimum Investment',     val: 'TBD   $100–$500 indicative range' },
                     { label: 'Eligibility',            val: 'All US investors subject to Reg CF investment limits' },
                     { label: 'Portal',                 val: 'Fraction Universe Inc. (FINRA registration pending)' },
-                    { label: 'Issuer',                 val: 'TBD LLC — to be formed by ANVL counsel (WY or DE)' },
-                    { label: 'PPM Date',               val: 'TBD — pending definitive agreement and counsel review' },
+                    { label: 'Issuer',                 val: 'TBD LLC   to be formed by ANVL counsel (WY or DE)' },
+                    { label: 'PPM Date',               val: 'TBD   pending definitive agreement and counsel review' },
                     { label: 'Transfer Restrictions',  val: '12-month resale restriction per Reg CF Rule 501' },
                   ].map(r => (
                     <div key={r.label} className="io-term-row">
@@ -828,10 +828,10 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                 <p className="io-section-body io-small">All waterfall terms are preliminary. Subject to counsel review and definitive LLC operating agreement.</p>
                 <div className="io-waterfall">
                   {[
-                    { tier: '1', label: 'First — pari passu, cumulative basis', items: ['75% Class A Units — until distributions equal full purchase price', '25% Talent Pool — deferred fixed compensation and guild payments'] },
+                    { tier: '1', label: 'First   pari passu, cumulative basis', items: ['75% Class A Units   until distributions equal full purchase price', '25% Talent Pool   deferred fixed compensation and guild payments'] },
                     { tier: '2', label: 'Second', items: ['100% Talent Pool Contractual Deferred Fixed Compensation (if any remains unpaid)'] },
-                    { tier: '3', label: 'Third', items: ['100% Class B Unit holders — operating costs capped at 13% of project budget in aggregate'] },
-                    { tier: '4', label: 'Fourth — continuing, pari passu', items: ['37.5% Class A Units', '37.5% Class B Units', '25% Talent Pool Profit Participants (up to 25%; overage borne pro rata by A and B)'] },
+                    { tier: '3', label: 'Third', items: ['100% Class B Unit holders   operating costs capped at 13% of project budget in aggregate'] },
+                    { tier: '4', label: 'Fourth   continuing, pari passu', items: ['37.5% Class A Units', '37.5% Class B Units', '25% Talent Pool Profit Participants (up to 25%; overage borne pro rata by A and B)'] },
                   ].map(w => (
                     <div key={w.tier} className="io-waterfall-tier">
                       <div className="io-waterfall-tier-header">
@@ -860,14 +860,14 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
             {tab === 5 && (
               <div className="io-section">
                 <div className="io-draft-banner">
-                  <strong>DRAFT</strong> — Proceeds allocation is indicative and subject to final PPM and counsel review.
+                  <strong>DRAFT</strong>   Proceeds allocation is indicative and subject to final PPM and counsel review.
                 </div>
                 <h2 className="io-section-h">Use of Proceeds</h2>
                 <p className="io-section-body">
                   The following illustrates how INDIGO's Reg CF community tranche proceeds would be allocated, subject to finalization of the full $22M capital stack and the terms of the definitive offering agreement.
                 </p>
 
-                <h3 className="io-sub-h">Phase 1 — Packaging ($2M indicative)</h3>
+                <h3 className="io-sub-h">Phase 1   Packaging ($2M indicative)</h3>
                 {[
                   { cat: 'Director engagement & attachment',             amt: '$400,000' },
                   { cat: 'Lead cast attachment fees & holds',             amt: '$800,000' },
@@ -883,7 +883,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                   </div>
                 ))}
 
-                <h3 className="io-sub-h" style={{ marginTop: '32px' }}>Phase 2 — Production ($20M indicative)</h3>
+                <h3 className="io-sub-h" style={{ marginTop: '32px' }}>Phase 2   Production ($20M indicative)</h3>
                 <p className="io-section-body io-small">Phase 2 breakdown is indicative. Final amounts subject to production budget, tax credits, pre-sales, and financing.</p>
                 {[
                   { cat: 'Above-the-line (cast, director, producer fees)',            amt: '$4,500,000' },
@@ -908,7 +908,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
             {tab === 6 && (
               <div className="io-section">
                 <div className="io-draft-banner">
-                  <strong>Risk Factors</strong> — Investing in early-stage film securities involves substantial risk. You should carefully consider all risk factors before investing.
+                  <strong>Risk Factors</strong>   Investing in early-stage film securities involves substantial risk. You should carefully consider all risk factors before investing.
                 </div>
                 <h2 className="io-section-h">Risk Factors</h2>
                 <p className="io-section-body">
@@ -933,7 +933,7 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                     cat: 'Project / Industry Risks',
                     risks: [
                       'Sole asset is an interest in the INDIGO project',
-                      'Lack of portfolio diversification — single project exposure',
+                      'Lack of portfolio diversification   single project exposure',
                       'No investor approval of day-to-day production decisions',
                       'Uncertain terms for loan facilities, distribution, and production agreements',
                       'No guaranteed distributions at any time',
@@ -955,14 +955,14 @@ export function IndigoOffering({ onBack }: { onBack: () => void }) {
                   {
                     cat: 'Securities Risks',
                     risks: [
-                      'General investment risk — you may lose your entire principal',
+                      'General investment risk   you may lose your entire principal',
                       'Significant restrictions on transferability of units for 12 months (Reg CF Rule 501)',
-                      'Price per unit not established by independent valuation — set by the issuer',
-                      'This is a private offering — not reviewed or approved by any state or federal agency except as noted',
-                      'Must comply with Reg CF exemption requirements — non-compliance would require registration or return of funds',
-                      'All financial projections are speculative — actual results may differ materially',
+                      'Price per unit not established by independent valuation   set by the issuer',
+                      'This is a private offering   not reviewed or approved by any state or federal agency except as noted',
+                      'Must comply with Reg CF exemption requirements   non-compliance would require registration or return of funds',
+                      'All financial projections are speculative   actual results may differ materially',
                       'No guarantee of return on investment',
-                      'Securities are equity — junior to all indebtedness of the company',
+                      'Securities are equity   junior to all indebtedness of the company',
                       'No assurance of a liquidity event or opportunity to exit your investment',
                     ],
                   },
